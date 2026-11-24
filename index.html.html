@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مستر احمد محمد عبد الفتاح | MR. AHMED MOHAMED ABDEL FATTAH</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{brand:'#2563eb'},fontFamily:{cairo:['Cairo','sans-serif']}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Cairo',sans-serif}
+.gradient{background:linear-gradient(135deg,#0f172a 0%,#2563eb 55%,#7c3aed 100%)}
+.glass{background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2)}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:1.25rem;padding:1.25rem;box-shadow:0 4px 20px rgba(0,0,0,.03)}
+.dark .card{background:#0f172a;border-color:#1e293b}
+.input{width:100%;padding:.75rem 1rem;border-radius:.9rem;border:1.5px solid #e2e8f0;outline:none;font-weight:700;background:#fff;color:#0f172a}
+.dark .input{background:#1e293b;border-color:#334155;color:#fff}
+.input:focus{border-color:#7c3aed;box-shadow:0 0 0 4px rgba(124,58,237,.15)}
+.btn{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-weight:800;border-radius:.9rem;padding:.8rem 1rem;transition:.2s}
+.btn:hover{opacity:.95;transform:translateY(-1px)}
+.badge{font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px}
+.watermark{position:relative;overflow:hidden}
+.watermark::after{content:attr(data-wm);position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:800;padding:4px 9px;border-radius:8px;z-index:10;pointer-events:none}
+.nav-active{background:#fff!important;color:#0f172a!important}
+.pay-card.selected{border-color:#2563eb!important;background:#eff6ff!important;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.dark .pay-card.selected{background:#1e3a8a!important;border-color:#60a5fa!important}
+.big-icon{transition:.25s;cursor:pointer}
+.big-icon:hover{transform:translateY(-6px) scale(1.02)}
+.float{animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.teacher-tab.active{background:#0f172a!important;color:#fff!important}
+.dark .teacher-tab.active{background:#2563eb!important;color:#fff!important}
+.role-badge{font-size:11px;font-weight:900;padding:5px 10px;border-radius:999px}
+</style>
+</head>
+<body class="bg-[#f6f7fb] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+
+<header class="gradient text-white sticky top-0 z-40 shadow-xl">
+<div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-3 cursor-pointer" onclick="if(getRole()==='guest') UI.showGate()">
+<div class="w-12 h-12 rounded-2xl bg-white text-2xl flex items-center justify-center shadow float">🩺</div>
+<div>
+  <h1 class="font-black text-[17px] leading-5">مستر احمد محمد عبد الفتاح</h1>
+  <p class="text-[11px] text-amber-300 font-black tracking-wide">MR. AHMED MOHAMED ABDEL FATTAH</p>
+  <p class="text-[11px] text-indigo-100 font-bold">منصة التمريض • أولى ثانوي تمريض</p>
+  <span id="role-badge" class="hidden role-badge mt-1 inline-block"></span>
+</div>
+</div>
+<nav id="nav-student" class="hidden flex-wrap gap-1.5 text-[13px] font-bold">
+<button onclick="UI.showStudent('home',this)" class="nav-btn px-3.5 py-2 rounded-xl glass nav-active">🏠 الرئيسية</button>
+<button onclick="UI.showStudent('subjects',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">📚 موادك</button>
+<button onclick="UI.showStudent('attendance',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">📅 حضورك</button>
+<button onclick="UI.showStudent('exams',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">📝 اختباراتك</button>
+<button onclick="UI.showStudent('notifications',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">🔔 إشعاراتك</button>
+</nav>
+<nav id="nav-teacher" class="hidden flex-wrap gap-1.5 text-[13px] font-bold">
+<button onclick="UI.showTeacher('teacher',this)" class="nav-btn px-3.5 py-2 rounded-xl bg-amber-400 text-slate-950">⚙️ لوحة المعلم</button>
+<button onclick="UI.showTeacher('teacher-codes',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">🔑 الأكواد</button>
+<button onclick="UI.showTeacher('teacher-students',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">👨‍🎓 طلابك</button>
+<button onclick="UI.showTeacher('teacher-videos',this)" class="nav-btn px-3.5 py-2 rounded-xl glass">🎥 فيديوهاتك</button>
+</nav>
+<div class="flex items-center gap-2">
+<div id="sub-timer-badge" class="hidden bg-white text-rose-600 text-xs font-black px-3 py-2 rounded-xl">⏳ متبقي: <span id="sub-days-left">--</span> يوم</div>
+<button onclick="UI.toggleTheme()" title="تبديل الوضع الليلي" class="px-3 py-2 rounded-xl glass font-bold text-xs">🌙 / ☀️</button>
+<button id="header-login-btn" onclick="openRoleChoice()" class="px-5 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-sm shadow">🔐 دخول</button>
+<button id="header-logout-btn" onclick="Auth.logout()" class="hidden px-4 py-2.5 rounded-xl bg-rose-500 text-white font-black text-sm">خروج 🚪</button>
+</div>
+</div>
+</header>
+
+<div id="session-bar" class="hidden bg-slate-900 text-white text-sm py-2.5 px-4">
+  <div class="max-w-7xl mx-auto flex justify-between gap-2 flex-wrap">
+    <b id="session-summary"></b>
+    <div class="flex gap-4">
+      <button id="session-att-btn" onclick="UI.showStudent('attendance')" class="underline text-emerald-300 font-bold">تسجيل حضور اليوم</button>
+      <button onclick="Auth.logout()" class="text-rose-300 font-bold">خروج</button>
+    </div>
+  </div>
+</div>
+
+<main class="max-w-7xl mx-auto px-4 py-6 space-y-8 flex-1 w-full">
+
+<section id="sec-gate" class="space-y-6">
+<div class="gradient rounded-[2rem] p-6 sm:p-8 text-white shadow-xl">
+  <div class="grid md:grid-cols-2 gap-6 items-center">
+    <div class="space-y-4 text-center md:text-right">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-white/15 text-xs font-black">أهلاً بيك في منصة مستر احمد محمد عبد الفتاح</span>
+      <h2 class="text-3xl sm:text-[42px] leading-tight font-black">منصة التمريض الأولى<br><span class="text-amber-300">للصف الأول</span></h2>
+      <p class="text-[13px] font-black tracking-wide text-amber-200">MR. AHMED MOHAMED ABDEL FATTAH</p>
+      <p class="text-indigo-100 font-bold">مع مستر احمد محمد عبد الفتاح هتتعلم تمريض صح - شرح بسيط، فيديوهات، اختبارات، ومتابعة لحد ما تتفوق 💪</p>
+      <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+        <span class="px-3 py-1.5 rounded-full bg-white text-slate-900 text-xs font-black">🩺 4 مواد</span>
+        <span class="px-3 py-1.5 rounded-full bg-amber-400 text-slate-900 text-xs font-black">🎁 انجليزي مجاناً</span>
+        <span class="px-3 py-1.5 rounded-full bg-emerald-500 text-white text-xs font-black">⭐ تقييم 5 نجوم</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="w-64 h-72 sm:w-72 sm:h-80 mx-auto rounded-[2rem] bg-white/15 flex flex-col items-center justify-center border-4 border-white/30">
+        <div class="text-8xl">🩺</div>
+        <div class="mt-4 px-5 py-2 rounded-full bg-white text-slate-900 font-black text-sm shadow">مستر احمد محمد عبد الفتاح</div>
+        <p class="text-[11px] font-black tracking-widest text-amber-200 mt-2">MR. AHMED MOHAMED ABDEL FATTAH</p>
+        <p class="text-xs font-black text-white mt-1">⭐⭐⭐⭐⭐ 5.0</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div onclick="openStudentLogin()" class="big-icon card !p-0 overflow-hidden text-center">
+  <div class="bg-gradient-to-b from-blue-500 to-blue-600 p-6"><div class="w-20 h-20 mx-auto bg-white rounded-3xl text-4xl flex items-center justify-center shadow-lg">🎓</div></div>
+  <div class="p-4"><h3 class="font-black text-lg text-blue-600">1 - دخول كطالب</h3><p class="text-xs text-slate-500 font-bold mt-1">اسم + رقم + كود</p><div class="mt-3 py-2 rounded-xl bg-blue-600 text-white font-black text-sm">دخول ←</div></div>
+</div>
+<div onclick="openTeacherLogin()" class="big-icon card !p-0 overflow-hidden text-center">
+  <div class="bg-gradient-to-b from-violet-500 to-violet-600 p-6"><div class="w-20 h-20 mx-auto bg-white rounded-3xl text-4xl flex items-center justify-center shadow-lg">👨‍🏫</div></div>
+  <div class="p-4"><h3 class="font-black text-lg text-violet-600">2 - دخول كمعلم</h3><p class="text-xs text-slate-500 font-bold mt-1">لوحة المعلم فقط</p><div class="mt-3 py-2 rounded-xl bg-violet-600 text-white font-black text-sm">دخول ←</div></div>
+</div>
+<div onclick="UI.showGateSubscribe()" class="big-icon card !p-0 overflow-hidden text-center">
+  <div class="bg-gradient-to-b from-emerald-500 to-emerald-600 p-6"><div class="w-20 h-20 mx-auto bg-white rounded-3xl text-4xl flex items-center justify-center shadow-lg">💳</div></div>
+  <div class="p-4"><h3 class="font-black text-lg text-emerald-600">3 - الاشتراك</h3><p class="text-xs text-slate-500 font-bold mt-1">اشترك في مادة أو أكتر</p><div class="mt-3 py-2 rounded-xl bg-emerald-600 text-white font-black text-sm">اشترك الآن ←</div></div>
+</div>
+<a id="gate-wa-link" href="https://wa.me/201211466202?text=%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A7%D8%AF%D9%81%D8%B9%20%D9%88%D8%A7%D8%B4%D8%AA%D8%B1%D9%83%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D8%A9" target="_blank" class="big-icon card !p-0 overflow-hidden text-center block">
+  <div class="bg-gradient-to-b from-amber-400 to-amber-500 p-6"><div class="w-20 h-20 mx-auto bg-white rounded-3xl text-4xl flex items-center justify-center shadow-lg">💬</div></div>
+  <div class="p-4"><h3 class="font-black text-lg text-amber-600">4 - الدفع</h3><p class="text-xs text-slate-500 font-bold mt-1">ادفع على واتساب</p><div class="mt-3 py-2 rounded-xl bg-amber-400 text-slate-900 font-black text-sm">ادفع دلوقتي ←</div></div>
+</a>
+</div>
+
+<div class="card p-6 space-y-3">
+  <div class="flex flex-wrap items-center gap-2">
+    <h3 class="text-xl font-black">من هو مستر احمد محمد عبد الفتاح؟</h3>
+    <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-black">⭐⭐⭐⭐⭐ 5.0</span>
+  </div>
+  <p class="text-[13px] font-black tracking-wide text-amber-600">MR. AHMED MOHAMED ABDEL FATTAH</p>
+  <p class="text-[15px] text-slate-700 dark:text-slate-300 font-bold">مستر محترف في شرح مواد أولى ثانوي تمريض، بيشرح بطريقة سهلة وبسيطة توصلك المعلومة من أول مرة.</p>
+  <p class="text-sm text-slate-600 dark:text-slate-400 font-bold">حاصل على تقييم <b class="text-amber-600">5 نجوم ⭐⭐⭐⭐⭐</b> من طلابه - عملي ونظري وتشريح وفيسيولوجي.</p>
+  <button onclick="UI.showGateSubscribe()" class="btn !py-2.5 text-sm">اشترك مع المستر دلوقتي →</button>
+</div>
+</section>
+
+<div id="student-area" class="hidden space-y-8">
+<section id="sec-home" class="space-y-8">
+<div class="gradient rounded-[2rem] p-6 sm:p-8 text-white">
+  <div class="grid md:grid-cols-3 gap-6 items-center">
+    <div class="md:col-span-2 space-y-4">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-white/15 text-xs font-black">🎓 لوحة الطالب - <span id="student-name-label"></span></span>
+      <h2 class="text-3xl font-black">أهلاً بيك يا بطل<br><span class="text-amber-300">في منصتك</span></h2>
+      <p class="text-indigo-100 font-bold">دي حاجتك انت بس: موادك، حضورك، اختباراتك، إشعاراتك</p>
+      <div class="flex gap-3 flex-wrap">
+        <button onclick="UI.showStudent('subjects')" class="px-7 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-black">📚 ادخل على موادك</button>
+        <button onclick="UI.showStudent('attendance')" class="px-6 py-3.5 rounded-2xl bg-white text-slate-900 font-black text-sm">📅 سجل حضورك</button>
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="w-44 h-52 mx-auto rounded-[1.5rem] bg-white/15 flex flex-col items-center justify-center border-4 border-white/30">
+        <div class="text-6xl">🎓</div>
+        <p class="text-xs font-black mt-2" id="student-code-label"></p>
+        <p class="text-xs font-black text-amber-300">⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+  <div class="card"><p class="text-xs">📚 موادك المشتركة</p><p class="text-2xl font-black text-blue-600 mt-1" id="student-subject-count">4 مواد</p><p class="text-xs text-slate-500 mt-1" id="student-subject-label"></p></div>
+  <div class="card"><p class="text-xs">✅ حضورك</p><p id="stat-attendance-student" class="text-3xl font-black text-emerald-600 mt-1">0</p></div>
+  <div class="card"><p class="text-xs">⏳ اشتراكك</p><p class="text-3xl font-black text-amber-500 mt-1"><span id="student-days-left">--</span> يوم</p></div>
+</div>
+<div id="home-announcements" class="space-y-2"></div>
+<div><h3 class="text-xl font-black mb-4">📚 موادك</h3><div id="home-subjects-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div></div>
+</section>
+
+<section id="sec-subjects" class="hidden">
+  <div class="card space-y-5">
+    <div class="flex justify-between flex-wrap gap-3">
+      <h2 class="text-xl font-black text-blue-600">📚 موادك وفيديوهاتك</h2>
+      <div id="subject-tabs" class="flex flex-wrap gap-2"></div>
+    </div>
+    <div id="selected-subject-videos" class="grid md:grid-cols-2 gap-4"></div>
+  </div>
+</section>
+
+<section id="sec-attendance" class="hidden">
+  <div class="grid lg:grid-cols-5 gap-5">
+    <div class="card lg:col-span-2 h-fit space-y-4">
+      <h2 class="text-xl font-black text-emerald-600">📅 حضورك اليومي</h2>
+      <p class="text-xs text-slate-500 font-bold">سجل حضورك كل يوم عشان المعلم يتابعك</p>
+      <form onsubmit="Attendance.save(event)" class="space-y-3 text-sm">
+        <input id="att-student-name" required placeholder="اسمك" class="input" />
+        <input id="att-student-phone" required placeholder="رقمك" class="input" dir="ltr" />
+        <input id="att-parent-phone" required placeholder="رقم ولي الأمر" class="input" dir="ltr" />
+        <button class="w-full btn">✅ تأكيد حضور اليوم</button>
+      </form>
+    </div>
+    <div class="card lg:col-span-3 space-y-3">
+      <h3 class="font-black">سجل حضورك الأخير</h3>
+      <div id="att-list" class="space-y-2"></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-exams" class="hidden">
+  <div class="card space-y-5">
+    <div class="flex justify-between flex-wrap gap-3">
+      <h2 class="text-xl font-black text-violet-600">📝 اختباراتك</h2>
+      <select id="exam-subject-filter" onchange="renderExams()" class="input !w-auto font-bold text-sm">
+        <option value="all">كل المواد</option>
+        <option value="practical_nursing">العملي</option>
+        <option value="theory_nursing">النظري</option>
+        <option value="anatomy">التشريح</option>
+        <option value="physiology">الفيسيولوجي</option>
+      </select>
+    </div>
+    <div id="exams-by-subject-container" class="grid md:grid-cols-2 gap-4"></div>
+    <div id="exam-runner-box" class="hidden p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border space-y-3"></div>
+  </div>
+</section>
+
+<section id="sec-notifications" class="hidden">
+  <div class="card space-y-4">
+    <h2 class="text-xl font-black">🔔 إشعاراتك انت بس</h2>
+    <p class="text-xs text-slate-500">إعلانات المستر ليك + نتيجة حضورك واختباراتك</p>
+    <div id="notifications-list" class="space-y-3"></div>
+  </div>
+</section>
+</div>
+
+<div id="teacher-area" class="hidden space-y-5">
+<section id="sec-teacher" class="space-y-5">
+<div class="gradient rounded-[1.5rem] p-5 text-white flex flex-wrap justify-between gap-4">
+  <div class="flex items-center gap-4">
+    <div class="w-16 h-16 rounded-2xl bg-white text-4xl flex items-center justify-center">👨‍🏫</div>
+    <div>
+      <h2 class="text-xl font-black">لوحة المعلم - أهلاً بيك يا مستر احمد</h2>
+      <p class="text-[11px] font-black text-amber-300">MR. AHMED MOHAMED ABDEL FATTAH</p>
+      <p class="text-sm">لوحة التحكم الكاملة • <span id="teacher-today-date"></span></p>
+    </div>
+  </div>
+  <div class="flex gap-2 items-center flex-wrap">
+    <button onclick="Teacher.exportData()" class="px-4 py-2.5 rounded-xl bg-white text-slate-900 font-black text-xs">📥 تصدير نسخة احتياطية</button>
+    <label class="px-4 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs cursor-pointer">
+      📤 استيراد نسخة
+      <input type="file" accept=".json" onchange="Teacher.importData(event)" class="hidden" />
+    </label>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="card !p-4"><p>👨‍🎓 طلابك</p><p id="t-stat-students" class="text-3xl font-black">0</p></div>
+  <div class="card !p-4"><p>🔑 أكوادك</p><p id="t-stat-codes" class="text-3xl font-black text-violet-600">0</p></div>
+  <div class="card !p-4"><p>✅ حضور الطلاب</p><p id="t-stat-attendance" class="text-3xl font-black text-emerald-600">0</p></div>
+  <div class="card !p-4"><p>💰 فلوسك</p><p id="t-stat-revenue" class="text-3xl font-black text-amber-600">0 ج</p></div>
+</div>
+
+<div class="card !p-3 flex flex-wrap gap-2 sticky top-[72px] z-30">
+<button data-t-tab="overview" onclick="Teacher.switchTab('overview')" class="teacher-tab active px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">📊 نظرة عامة</button>
+<button data-t-tab="codes" onclick="Teacher.switchTab('codes')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">🔑 أكوادك <span id="tab-count-codes" class="badge bg-violet-600 text-white">0</span></button>
+<button data-t-tab="students" onclick="Teacher.switchTab('students')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">👨‍🎓 طلابك</button>
+<button data-t-tab="videos" onclick="Teacher.switchTab('videos')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">🎥 فيديوهاتك</button>
+<button data-t-tab="exams" onclick="Teacher.switchTab('exams')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">📝 امتحاناتك</button>
+<button data-t-tab="payments" onclick="Teacher.switchTab('payments')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">💳 دفع الطلاب <span id="tab-count-payments" class="badge bg-emerald-600 text-white">0</span></button>
+<button data-t-tab="attendance" onclick="Teacher.switchTab('attendance')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">📅 حضور الطلاب</button>
+<button data-t-tab="announce" onclick="Teacher.switchTab('announce')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">📢 إعلاناتك</button>
+<button data-t-tab="settings" onclick="Teacher.switchTab('settings')" class="teacher-tab px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-black text-sm">⚙️ إعداداتك</button>
+</div>
+
+<div id="t-tab-overview" class="space-y-4">
+  <div class="grid lg:grid-cols-2 gap-4">
+    <div class="card space-y-3">
+      <h3 class="font-black">⚡ إجراءاتك السريعة</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="Teacher.switchTab('codes')" class="p-4 rounded-2xl bg-violet-50 dark:bg-violet-950/40 text-right"><div class="text-2xl">🔑</div><b class="text-sm">اعمل كود جديد</b></button>
+        <button onclick="Teacher.switchTab('videos')" class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-right"><div class="text-2xl">🎥</div><b class="text-sm">ارفع فيديو أو رابط</b></button>
+        <button onclick="Teacher.switchTab('exams')" class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-right"><div class="text-2xl">📝</div><b class="text-sm">امتحان جديد</b></button>
+        <button onclick="Teacher.switchTab('announce')" class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-right"><div class="text-2xl">📢</div><b class="text-sm">ابعت إعلان</b></button>
+      </div>
+    </div>
+    <div class="card space-y-3">
+      <h3 class="font-black">🔔 آخر نشاطات طلابك</h3>
+      <div id="teacher-activity" class="space-y-2"></div>
+    </div>
+  </div>
+  <div class="card space-y-3">
+    <h3 class="font-black">📋 حالة اشتراك الطلاب</h3>
+    <div id="teacher-expiring" class="space-y-2"></div>
+  </div>
+</div>
+
+<div id="t-tab-codes" class="hidden space-y-4">
+  <div class="card space-y-4">
+    <h3 class="font-black text-violet-600 text-lg">🔑 أكوادك - انت اللي بتحددها</h3>
+    <p class="text-xs text-slate-500 font-bold">الكود مربوط برقم الطالب. الطالب ده بس هو اللي هيدخل بيه.</p>
+    <div class="p-4 rounded-2xl border-2 border-dashed space-y-3 bg-violet-50/50 dark:bg-violet-950/20">
+      <div class="grid md:grid-cols-3 gap-3">
+        <input id="new-code-value" placeholder="الكود - مثال: AHMED1" class="input !py-3 font-black uppercase text-center" />
+        <input id="new-code-phone" placeholder="رقم الطالب - 01xxxxxxxxx" class="input !py-3 text-center font-bold" dir="ltr" />
+        <input id="new-code-name" placeholder="اسم الطالب" class="input !py-3" />
+      </div>
+      <div class="grid md:grid-cols-2 gap-3">
+        <select id="new-code-subject" class="input font-bold">
+          <option>كل المواد</option>
+          <option>أسس التمريض العملي</option>
+          <option>أسس التمريض النظري</option>
+          <option>التشريح / Anatomy</option>
+          <option>الفيسيولوجي</option>
+        </select>
+        <button onclick="Teacher.createCode()" class="btn !py-3 text-sm">➕ اعمل الكود ده</button>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="Teacher.generateRandomCode()" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-black text-xs">🎲 ولّد كود عشوائي</button>
+        <span id="codes-left-label" class="px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border text-xs font-black">إجمالي الأكواد: 0</span>
+      </div>
+    </div>
+    <div id="teacher-codes-list" class="space-y-3"></div>
+  </div>
+</div>
+
+<div id="t-tab-students" class="hidden">
+  <div class="card space-y-4">
+    <div class="flex flex-wrap gap-3 justify-between">
+      <h3 class="font-black">👨‍🎓 طلابك</h3>
+      <div class="flex gap-2">
+        <input id="student-search" oninput="renderTeacher()" placeholder="🔍 ابحث بالاسم أو الرقم..." class="input !w-64 !py-2.5 text-sm" />
+        <select id="student-filter" onchange="renderTeacher()" class="input !w-auto !py-2.5 text-sm">
+          <option value="all">كل الطلاب</option>
+          <option value="active">نشط</option>
+          <option value="blocked">محظور</option>
+        </select>
+      </div>
+    </div>
+    <div id="teacher-students-list" class="space-y-3"></div>
+  </div>
+</div>
+
+<div id="t-tab-videos" class="hidden">
+  <div class="card space-y-4">
+    <h3 class="font-black text-blue-600">🎥 فيديوهاتك (رابط يوتيوب / جوجل درايف أو ملف من الجهاز)</h3>
+    <div id="teacher-subject-tabs" class="flex flex-wrap gap-2"></div>
+    <div class="p-4 rounded-2xl border-2 border-dashed space-y-3 bg-blue-50/40 dark:bg-blue-950/20">
+      <div class="grid md:grid-cols-3 gap-3">
+        <input id="upload-video-title" placeholder="عنوان الحصة / الفيديو" class="input" />
+        <input id="upload-video-url" placeholder="رابط يوتيوب أو فيديو مباشر (موصى به للاستضافة)" class="input" dir="ltr" />
+        <input id="upload-video-file" type="file" accept="video/*" class="input text-xs" />
+      </div>
+      <div class="flex justify-between items-center flex-wrap gap-2">
+        <span class="text-[11px] text-slate-500 font-bold">💡 نصيحة: استخدم رابط YouTube غير مدرج (Unlisted) لسرعة التشغيل وعدم امتلاء مساحة المتصفح.</span>
+        <button onclick="Teacher.uploadVideo()" class="btn !py-2.5 !px-6 text-xs">➕ إضافة الفيديو</button>
+      </div>
+    </div>
+    <div id="teacher-subject-videos-list" class="grid md:grid-cols-2 gap-3"></div>
+  </div>
+</div>
+
+<div id="t-tab-exams" class="hidden">
+  <div class="card space-y-4">
+    <h3 class="font-black text-violet-600">📝 امتحاناتك</h3>
+    <div id="teacher-exams-control" class="space-y-2"></div>
+    <div class="p-4 rounded-2xl border-2 border-dashed space-y-3">
+      <div class="grid md:grid-cols-3 gap-2">
+        <input id="new-exam-title" placeholder="عنوان الامتحان" class="input" />
+        <select id="new-exam-subject" class="input">
+          <option value="practical_nursing">العملي</option>
+          <option value="theory_nursing">النظري</option>
+          <option value="anatomy">التشريح</option>
+          <option value="physiology">الفيسيولوجي</option>
+        </select>
+        <select id="new-exam-type" class="input"><option>أسبوعي</option><option>شهري</option></select>
+      </div>
+      <input id="new-exam-q" placeholder="السؤال" class="input" />
+      <div class="grid md:grid-cols-3 gap-2">
+        <input id="new-exam-opt1" placeholder="الاختيار 1 (الصح)" class="input" />
+        <input id="new-exam-opt2" placeholder="الاختيار 2" class="input" />
+        <input id="new-exam-opt3" placeholder="الاختيار 3" class="input" />
+      </div>
+      <button onclick="Teacher.addExam()" class="btn !py-2.5 text-sm w-full">➕ إضافة الامتحان</button>
+    </div>
+  </div>
+</div>
+
+<div id="t-tab-payments" class="hidden space-y-4">
+  <div class="card space-y-4">
+    <h3 class="font-black text-emerald-600">🧾 طلبات اشتراك ودفع الطلاب</h3>
+    <div id="teacher-payments-list" class="space-y-3"></div>
+  </div>
+</div>
+
+<div id="t-tab-attendance" class="hidden">
+  <div class="card space-y-4">
+    <div class="flex justify-between">
+      <h3 class="font-black text-amber-600">📋 حضور طلابك</h3>
+      <button onclick="Teacher.clearAttendance()" class="px-3 py-1.5 rounded-lg bg-rose-100 text-rose-700 font-black text-xs">مسح الكل</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-right">
+        <thead><tr class="bg-slate-100 dark:bg-slate-800"><th class="p-3">الاسم</th><th class="p-3">الطالب</th><th class="p-3">ولي الأمر</th><th class="p-3">التاريخ</th><th class="p-3">إجراء</th></tr></thead>
+        <tbody id="teacher-attendance-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="t-tab-announce" class="hidden">
+  <div class="card space-y-4">
+    <h3 class="font-black">📢 إعلاناتك للطلاب</h3>
+    <textarea id="announce-text" rows="3" placeholder="اكتب الإعلان..." class="input"></textarea>
+    <button onclick="Teacher.sendAnnouncement()" class="btn !py-2.5 text-sm">📢 نشر للطلاب</button>
+    <div id="announce-list" class="space-y-2"></div>
+  </div>
+</div>
+
+<div id="t-tab-settings" class="hidden">
+  <div class="card space-y-4">
+    <h3 class="font-black">⚙️ إعداداتك</h3>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="p-4 rounded-2xl border space-y-2">
+        <b>🔐 كلمة سر المعلم</b>
+        <p class="text-xs text-slate-500">كلمة السر محفوظة ومش بتظهر لحد. لو عايز تغيرها اكتب الجديدة هنا.</p>
+        <input id="setting-teacher-pass" type="password" placeholder="كلمة سر جديدة" class="input" />
+        <button onclick="Teacher.changeTeacherPass()" class="px-3 py-2 rounded-lg bg-slate-900 text-white font-black text-xs">تغيير كلمة السر</button>
+      </div>
+      <div class="p-4 rounded-2xl border space-y-2">
+        <b>💳 رقم فودافون كاش / واتساب</b>
+        <p class="text-xs font-mono" id="current-pay-number-label">01211466202</p>
+        <input id="setting-pay-number" placeholder="رقم جديد (01xxxxxxxxx)" class="input" dir="ltr" />
+        <button onclick="Teacher.changePayNumber()" class="px-3 py-2 rounded-lg bg-blue-600 text-white font-black text-xs">حفظ</button>
+      </div>
+      <div class="p-4 rounded-2xl border space-y-2">
+        <b>🔑 إدارة الأكواد</b>
+        <p class="text-xs text-slate-500">حذف جميع الأكواد المسجلة حالياً.</p>
+        <button onclick="Teacher.clearCodes()" class="px-3 py-2 rounded-lg bg-rose-100 text-rose-700 font-black text-xs">مسح كل الأكواد</button>
+      </div>
+      <div class="p-4 rounded-2xl border space-y-2">
+        <b>🗑️ تصفير المنصة بالكامل</b>
+        <p class="text-xs text-slate-500">مسح جميع البيانات والبدء على نظافة.</p>
+        <button onclick="Teacher.resetAll()" class="px-3 py-2 rounded-lg bg-rose-600 text-white font-black text-xs">مسح الكل</button>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+</div>
+
+<section id="sec-subscribe" class="hidden">
+  <div class="mb-4">
+    <button onclick="UI.showGate()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-black">→ رجوع للصفحة الرئيسية</button>
+  </div>
+  <div class="grid lg:grid-cols-2 gap-6">
+    <div class="card space-y-4">
+      <h2 class="text-xl font-black text-blue-600">💳 الاشتراك</h2>
+      <form onsubmit="Pay.submit(event)" class="space-y-3 text-sm">
+        <input id="sub-name" required placeholder="اسم الطالب ثلاثي" class="input" />
+        <div class="grid sm:grid-cols-2 gap-3">
+          <input id="sub-phone" required placeholder="رقم الطالب (واتساب)" class="input" dir="ltr" />
+          <input id="sub-parent-phone" required placeholder="رقم ولي الأمر" class="input" dir="ltr" />
+        </div>
+        <div class="p-4 rounded-2xl border-2 border-amber-200 bg-amber-50 dark:bg-amber-950/30 space-y-2">
+          <label class="block font-black text-amber-700 dark:text-amber-300">📱 الرقم اللي حوّلت منه *</label>
+          <input id="sub-from-number" required placeholder="010xxxxxxxxx" class="input !border-amber-300" dir="ltr" />
+          <p class="text-[11px] font-bold">رقم فودافون كاش للتحويل: <b id="sub-pay-number" dir="ltr">01211466202</b></p>
+        </div>
+        <div class="space-y-3">
+          <div class="flex justify-between">
+            <h3 class="font-black">اختار المواد:</h3>
+            <button type="button" onclick="Pay.selectAll()" class="text-xs font-black text-blue-600 underline">كل المواد + انجليزي مجاناً</button>
+          </div>
+          <div id="pay-subjects-list" class="space-y-2"></div>
+          <div id="english-gift-box" class="hidden p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-center">
+            <b class="text-emerald-700">🎉 مبروك! هتاخد الانجليزي مجاناً</b>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 text-white flex justify-between items-center">
+            <div id="pay-amount-label" class="text-xl font-black">0 ج</div>
+            <div id="pay-count-label" class="text-xs font-black bg-white/15 px-3 py-1.5 rounded-full">0 مادة</div>
+          </div>
+          <input id="sub-amount" type="hidden" value="0" />
+          <input id="sub-subject" type="hidden" value="" />
+        </div>
+        <label class="text-xs font-black block">📸 سكرين التحويل</label>
+        <input id="sub-screenshot" required type="file" accept="image/*" class="input text-xs" />
+        <button class="w-full btn">📤 إرسال الطلب</button>
+      </form>
+      <div id="sub-pending-notice" class="hidden p-4 rounded-2xl bg-amber-50 border text-xs font-black text-amber-800">⏳ تم إرسال طلبك بنجاح وهو قيد المراجعة من المعلم. سيتم إرسال الكود الخاص بك على الواتساب فور التفعيل.</div>
+    </div>
+
+    <div class="card h-fit space-y-4">
+      <h3 class="font-black text-violet-600">💰 أسعار المواد</h3>
+      <div class="space-y-2 text-sm font-bold">
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 flex justify-between"><span>📚 مادة واحدة</span><b class="text-blue-600">50 ج</b></div>
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 flex justify-between"><span>📚📚 مادتين</span><b class="text-blue-600">100 ج</b></div>
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 flex justify-between"><span>📚📚📚 3 مواد</span><b class="text-blue-600">150 ج</b></div>
+        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex justify-between"><span>💎 كل المواد</span><b class="text-emerald-600">200 ج + انجليزي مجاناً</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bg-slate-900 text-slate-400 text-center text-xs py-5 mt-12">
+  <p class="font-black text-white">منصة مستر احمد محمد عبد الفتاح للتمريض</p>
+  <p class="mt-1">MR. AHMED MOHAMED ABDEL FATTAH • جميع الحقوق محفوظة © <span id="footer-year"></span></p>
+</footer>
+
+<div id="role-modal" class="fixed inset-0 bg-slate-950/75 hidden items-center justify-center p-4 z-50" onclick="if(event.target===this) closeModalFix()">
+<div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+  <div class="flex gap-3 items-center">
+    <div class="w-12 h-12 rounded-xl bg-blue-100 text-3xl flex items-center justify-center">🩺</div>
+    <div>
+      <h3 class="text-lg font-black leading-4">مستر احمد محمد عبد الفتاح</h3>
+      <p class="text-[10px] font-black tracking-widest text-amber-600">MR. AHMED MOHAMED ABDEL FATTAH</p>
+    </div>
+    <button onclick="closeModalFix()" class="mr-auto font-bold text-slate-500 text-xl">✕</button>
+  </div>
+
+  <div id="role-choice-step" class="space-y-3">
+    <button onclick="openStudentLogin()" class="w-full p-4 rounded-2xl border-2 border-blue-500 bg-blue-50 flex items-center gap-3 text-right">
+      <span class="text-3xl">🎓</span><div><div class="font-black text-blue-600">دخول كطالب</div><div class="text-xs text-slate-500 font-bold">هتشوف حاجتك انت بس</div></div><span class="mr-auto">←</span>
+    </button>
+    <button onclick="openTeacherLogin()" class="w-full p-4 rounded-2xl border-2 border-violet-500 bg-violet-50 flex items-center gap-3 text-right">
+      <span class="text-3xl">👨‍🏫</span><div><div class="font-black text-violet-600">دخول كمعلم</div><div class="text-xs text-slate-500 font-bold">خاص بالمعلم فقط</div></div><span class="mr-auto">←</span>
+    </button>
+  </div>
+
+  <div id="student-choice-step" class="hidden space-y-3">
+    <button onclick="Auth.backToChoice()" class="text-xs font-black text-blue-600">→ رجوع</button>
+    <button onclick="Auth.openExisting()" class="w-full p-4 rounded-2xl border-2 border-blue-500 bg-blue-50 flex gap-3 text-right">
+      <span class="text-3xl">🔑</span><div><div class="font-black text-blue-600">معايا كود</div><div class="text-xs text-slate-500 font-bold">الكود اللي المعلم اداهولك انت بس</div></div><span class="mr-auto">←</span>
+    </button>
+    <button onclick="closeModalFix();UI.showGateSubscribe()" class="w-full p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 flex gap-3 text-right">
+      <span class="text-3xl">💳</span><div><div class="font-black text-emerald-600">عايز أشترك</div></div><span class="mr-auto">←</span>
+    </button>
+  </div>
+
+  <form id="existing-student-form" onsubmit="Auth.submitJoin(event)" class="hidden space-y-3 text-sm">
+    <button type="button" onclick="Auth.backToStudentChoice()" class="text-xs font-black text-blue-600">→ رجوع</button>
+    <div class="p-3 rounded-xl bg-blue-50 text-xs font-bold text-blue-700">ادخل اسمك ورقم هاتفك والكود الخاص بك للدخول إلى المنصة.</div>
+    <input id="join-student-name" required placeholder="اسم الطالب" class="input" />
+    <input id="join-student-phone" required placeholder="رقم الهاتف (01xxxxxxxxx)" class="input text-center font-bold" dir="ltr" />
+    <input id="join-student-code" required placeholder="الكود الخاص بيك" class="input font-bold uppercase text-center" dir="ltr" />
+    <button class="w-full btn">دخول بالكود 🔑</button>
+    <div id="join-error" class="hidden p-3 rounded-xl bg-rose-50 text-xs font-black text-rose-700">❌ البيانات مش مطابقة. اتأكد من الكود والرقم.</div>
+  </form>
+
+  <form id="teacher-auth-form" onsubmit="Auth.submitTeacher(event)" class="hidden space-y-3 text-sm">
+    <button type="button" onclick="Auth.backToChoice()" class="text-xs font-black text-violet-600">→ رجوع</button>
+    <div class="p-3 rounded-xl bg-violet-50 text-xs font-bold text-violet-700 text-center">خاص بالمعلم فقط - اكتب كلمة السر الخاصة بيك</div>
+    <input id="teacher-secret-input" required type="password" placeholder="كلمة سر المعلم" class="input text-center font-bold" autocomplete="off" />
+    <button class="w-full btn">دخول لوحة المعلم</button>
+    <p id="teacher-error" class="hidden p-3 rounded-xl bg-rose-50 text-xs font-black text-rose-700 text-center">❌ كلمة السر غير صحيحة</p>
+  </form>
+</div>
+</div>
+
+<script>
+const _p = ["NjY2","NjY2"].join("");
+function getTeacherPass(){ try{ return atob(_p); }catch(e){ return "666666"; } }
+
+const DEFAULT_EXAMS = [
+  { id: "EX-P1", subjectKey: "practical_nursing", type: "أسبوعي", title: "أسبوعي - العملي", q: "أول خطوة قبل أي إجراء تمريضي؟", opts: ["غسل الأيدي وتقييم المريض", "تأجيل القياس", "إغلاق الستائر فقط"], ans: 0 },
+  { id: "EX-T1", subjectKey: "theory_nursing", type: "أسبوعي", title: "أسبوعي - النظري", q: "هدف رعاية التمريض الأساسية؟", opts: ["تعزيز صحة المريض وسلامته", "تجاهل الأعراض", "منع المتابعة"], ans: 0 },
+  { id: "EX-A1", subjectKey: "anatomy", type: "أسبوعي", title: "أسبوعي - التشريح", q: "يدرس تركيب الجسم؟", opts: ["Anatomy", "Physiology", "Pharmacology"], ans: 0 },
+  { id: "EX-PH1", subjectKey: "physiology", type: "أسبوعي", title: "أسبوعي - الفيسيولوجي", q: "الفيسيولوجي يركز على؟", opts: ["وظائف الأعضاء", "أسماء الأدوية فقط", "تاريخ المستشفيات"], ans: 0 }
+];
+
+const CONFIG = {
+  DB_KEY: "ahmed_nursing_platform_prod_v1",
+  THEME_KEY: "ahmed_nursing_theme",
+  CYCLE_DAYS: 35,
+  PAY_NUMBER: "01211466202",
+  PRICE: 50,
+  BRAND: "مستر احمد محمد عبد الفتاح",
+  MAX_CODES: 500,
+  SUBJECTS: [
+    { key: "practical_nursing", name: "أسس التمريض العملي", icon: "🩺", desc: "العملي والمهارات" },
+    { key: "theory_nursing", name: "أسس التمريض النظري", icon: "📚", desc: "المفاهيم الأساسية" },
+    { key: "anatomy", name: "التشريح / Anatomy", icon: "🦴", desc: "تركيب الجسم" },
+    { key: "physiology", name: "الفيسيولوجي", icon: "❤️", desc: "وظائف الأعضاء" }
+  ]
+};
+
+const defaultState = {
+  teacherCount: 0,
+  isTeacher: false,
+  currentStudent: null,
+  payments: [],
+  attendance: [],
+  notifications: [],
+  studentCodes: [],
+  announcements: [],
+  exams: JSON.parse(JSON.stringify(DEFAULT_EXAMS)),
+  videos: { practical_nursing: [], theory_nursing: [], anatomy: [], physiology: [] },
+  payNumber: "01211466202",
+  customTeacherPass: null
+};
+
+let state = (() => {
+  try {
+    const r = localStorage.getItem(CONFIG.DB_KEY);
+    if (r) {
+      const parsed = JSON.parse(r);
+      const merged = Object.assign(JSON.parse(JSON.stringify(defaultState)), parsed);
+      if (!Array.isArray(merged.exams)) merged.exams = JSON.parse(JSON.stringify(DEFAULT_EXAMS));
+      return merged;
+    }
+    return JSON.parse(JSON.stringify(defaultState));
+  } catch {
+    return JSON.parse(JSON.stringify(defaultState));
+  }
+})();
+
+if (localStorage.getItem(CONFIG.THEME_KEY) === "dark") {
+  document.documentElement.classList.add("dark");
+}
+document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+function currentTeacherPass(){ return state.customTeacherPass || getTeacherPass(); }
+let activeSubject = "practical_nursing", activeTeacherSubject = "practical_nursing", selectedSubjects = new Set(), teacherTab = "overview";
+
+function save(){
+  try {
+    localStorage.setItem(CONFIG.DB_KEY, JSON.stringify(state));
+  } catch (e) {
+    alert("⚠️ مساحة التخزين في المتصفح ممتلئة! يفضل استخدام روابط يوتيوب للفيديوهات بدلاً من رفع ملفات كبيرة.");
+  }
+  renderAll();
+}
+function notify(t, m){ state.notifications.unshift({ target: t, msg: m, time: new Date().toLocaleString("ar-EG") }); }
+function esc(s){ return String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function normalizePhone(p){ return String(p || "").replace(/[\s-]/g, "").replace(/^\+20/, "0").replace(/^20/, "0").trim(); }
+function getRole(){ if(state.isTeacher) return "teacher"; if(state.currentStudent && state.currentStudent.status === "approved") return "student"; return "guest"; }
+
+function isSubjectAllowed(subjectName){
+  const st = state.currentStudent;
+  if(!st || !st.subject || st.subject === "كل المواد") return true;
+  return st.subject.includes(subjectName);
+}
+
+function getAllowedSubjects(){
+  return CONFIG.SUBJECTS.filter(s => isSubjectAllowed(s.name));
+}
+
+function getEmbedUrl(url){
+  if(!url) return null;
+  const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+  if(ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+  const gdMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if(gdMatch) return `https://drive.google.com/file/d/${gdMatch[1]}/preview`;
+  return null;
+}
+
+function openRoleChoice(){
+  const m = document.getElementById("role-modal");
+  m.classList.remove("hidden"); m.style.display = "flex";
+  Auth.backToChoice();
+}
+function openStudentLogin(){
+  const m = document.getElementById("role-modal");
+  m.classList.remove("hidden"); m.style.display = "flex";
+  document.getElementById("role-choice-step").classList.add("hidden");
+  document.getElementById("teacher-auth-form").classList.add("hidden");
+  document.getElementById("existing-student-form").classList.add("hidden");
+  document.getElementById("student-choice-step").classList.remove("hidden");
+}
+function openTeacherLogin(){
+  const m = document.getElementById("role-modal");
+  m.classList.remove("hidden"); m.style.display = "flex";
+  document.getElementById("role-choice-step").classList.add("hidden");
+  document.getElementById("student-choice-step").classList.add("hidden");
+  document.getElementById("existing-student-form").classList.add("hidden");
+  document.getElementById("teacher-auth-form").classList.remove("hidden");
+}
+function closeModalFix(){
+  const m = document.getElementById("role-modal");
+  m.classList.add("hidden"); m.style.display = "none";
+}
+
+const UI = {
+  toggleTheme(){
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem(CONFIG.THEME_KEY, isDark ? "dark" : "light");
+  },
+  showStudent(sec, btn){
+    if(getRole() !== "student"){ UI.showGate(); return; }
+    document.getElementById("teacher-area").classList.add("hidden");
+    document.getElementById("sec-gate").classList.add("hidden");
+    document.getElementById("sec-subscribe").classList.add("hidden");
+    document.getElementById("student-area").classList.remove("hidden");
+    ["home","subjects","attendance","exams","notifications"].forEach(id => {
+      const el = document.getElementById("sec-" + id);
+      if(el) el.classList.toggle("hidden", id !== sec);
+    });
+    document.querySelectorAll('#nav-student .nav-btn').forEach(b => b.classList.remove('nav-active'));
+    if(btn) btn.classList.add('nav-active');
+    if(sec === "attendance" && state.currentStudent){
+      document.getElementById("att-student-name").value = state.currentStudent.name || "";
+      document.getElementById("att-student-phone").value = state.currentStudent.phone || "";
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+  showTeacher(sec, btn){
+    if(getRole() !== "teacher"){ UI.showGate(); return; }
+    document.getElementById("student-area").classList.add("hidden");
+    document.getElementById("sec-gate").classList.add("hidden");
+    document.getElementById("sec-subscribe").classList.add("hidden");
+    document.getElementById("teacher-area").classList.remove("hidden");
+    if(sec === "teacher") Teacher.switchTab("overview");
+    if(sec === "teacher-codes") Teacher.switchTab("codes");
+    if(sec === "teacher-students") Teacher.switchTab("students");
+    if(sec === "teacher-videos") Teacher.switchTab("videos");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+  showGate(){
+    document.getElementById("student-area").classList.add("hidden");
+    document.getElementById("teacher-area").classList.add("hidden");
+    document.getElementById("sec-subscribe").classList.add("hidden");
+    document.getElementById("sec-gate").classList.remove("hidden");
+    window.scrollTo({ top: 0 });
+  },
+  showGateSubscribe(){
+    if(getRole() === "student"){ UI.showStudent("home"); return; }
+    if(getRole() === "teacher"){ UI.showTeacher("teacher"); return; }
+    document.getElementById("student-area").classList.add("hidden");
+    document.getElementById("teacher-area").classList.add("hidden");
+    document.getElementById("sec-gate").classList.add("hidden");
+    document.getElementById("sec-subscribe").classList.remove("hidden");
+    Pay.renderSubjects();
+    window.scrollTo({ top: 0 });
+  },
+  updateNav(){
+    const role = getRole();
+    const navS = document.getElementById("nav-student");
+    const navT = document.getElementById("nav-teacher");
+    const badge = document.getElementById("role-badge");
+    const loginBtn = document.getElementById("header-login-btn");
+    const logoutBtn = document.getElementById("header-logout-btn");
+    const sessionBar = document.getElementById("session-bar");
+    const attBtn = document.getElementById("session-att-btn");
+    const payNum = state.payNumber || CONFIG.PAY_NUMBER;
+    navS.classList.add("hidden"); navS.classList.remove("flex");
+    navT.classList.add("hidden"); navT.classList.remove("flex");
+    badge.classList.add("hidden");
+    document.getElementById("sub-pay-number").textContent = payNum;
+    document.getElementById("current-pay-number-label").textContent = payNum;
+    const waLink = document.getElementById("gate-wa-link");
+    if(waLink) waLink.href = `https://wa.me/${payNum.replace(/^0/, "20")}?text=${encodeURIComponent("عايز ادفع واشترك في المنصة")}`;
+
+    if(role === "student"){
+      navS.classList.remove("hidden"); navS.classList.add("flex");
+      badge.classList.remove("hidden");
+      badge.textContent = "🎓 انت داخل كطالب - " + state.currentStudent.name;
+      badge.className = "role-badge mt-1 inline-block bg-blue-500 text-white";
+      loginBtn.classList.add("hidden"); logoutBtn.classList.remove("hidden");
+      sessionBar.classList.remove("hidden"); attBtn.classList.remove("hidden");
+      document.getElementById("session-summary").textContent = `👋 أهلا ${state.currentStudent.name} | كود: ${state.currentStudent.code}`;
+    } else if(role === "teacher"){
+      navT.classList.remove("hidden"); navT.classList.add("flex");
+      badge.classList.remove("hidden");
+      badge.textContent = "👨‍🏫 انت داخل كمعلم";
+      badge.className = "role-badge mt-1 inline-block bg-amber-400 text-slate-950";
+      loginBtn.classList.add("hidden"); logoutBtn.classList.remove("hidden");
+      sessionBar.classList.remove("hidden"); attBtn.classList.add("hidden");
+      document.getElementById("session-summary").textContent = `👨‍🏫 لوحة المعلم - مستر احمد محمد عبد الفتاح`;
+    } else {
+      loginBtn.classList.remove("hidden"); logoutBtn.classList.add("hidden");
+      sessionBar.classList.add("hidden");
+    }
+  }
+};
+
+function renderAll(){
+  renderHome();
+  renderSubjects();
+  renderExams();
+  renderNotifications();
+  renderTeacher();
+  checkCycle();
+  renderSession();
+  Pay.renderSubjects();
+  UI.updateNav();
+}
+
+function renderSession(){
+  const st = state.currentStudent;
+  if(st && st.status === "approved"){
+    const allowed = getAllowedSubjects();
+    document.getElementById("student-name-label").textContent = st.name;
+    document.getElementById("student-code-label").textContent = "كودك: " + st.code;
+    document.getElementById("student-subject-count").textContent = allowed.length + " مواد";
+    document.getElementById("student-subject-label").textContent = st.subject || "كل المواد";
+    const remain = st.enrolledAt ? Math.max(0, CONFIG.CYCLE_DAYS - Math.floor((Date.now() - st.enrolledAt) / 86400000)) : CONFIG.CYCLE_DAYS;
+    document.getElementById("student-days-left").textContent = remain;
+    const myAtt = state.attendance.filter(a => normalizePhone(a.phone) === normalizePhone(st.phone));
+    document.getElementById("stat-attendance-student").textContent = myAtt.length;
+    document.getElementById("att-list").innerHTML = myAtt.length
+      ? myAtt.map(a => `<div class="p-3 rounded-xl border flex justify-between text-xs font-bold"><span>✅ ${esc(a.name)}</span><span class="text-slate-500">${esc(a.date)}</span></div>`).join("")
+      : `<p class="text-xs text-slate-500">لم تسجل حضورك بعد.</p>`;
+  }
+}
+
+function renderHome(){
+  const allowed = getAllowedSubjects();
+  document.getElementById("home-subjects-grid").innerHTML = allowed.map(s => `
+    <div class="card space-y-3">
+      <div class="flex justify-between">
+        <span class="text-4xl w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center">${s.icon}</span>
+        <span class="badge bg-emerald-50 text-emerald-700">مفعّلة لك ✅</span>
+      </div>
+      <h4 class="font-black">${s.name}</h4>
+      <p class="text-xs text-slate-500 font-bold">${s.desc}</p>
+      <button onclick="activeSubject='${s.key}';UI.showStudent('subjects');renderSubjects()" class="w-full btn !py-2.5 text-sm">فتح فيديوهات المادة →</button>
+    </div>`).join("");
+
+  document.getElementById("home-announcements").innerHTML = state.announcements.length
+    ? state.announcements.slice(0, 2).map(a => `<div class="card !border-amber-300 bg-amber-50/60 dark:bg-amber-950/20 flex gap-3"><span>📢</span><div><b>إعلان من المستر ليك:</b><p class="text-sm font-bold">${esc(a.text)}</p></div></div>`).join("")
+    : "";
+}
+
+function renderSubjects(){
+  const allowed = getAllowedSubjects();
+  if(allowed.length && !allowed.some(s => s.key === activeSubject)){
+    activeSubject = allowed[0].key;
+  }
+  document.getElementById("subject-tabs").innerHTML = allowed.map(s => `
+    <button onclick="activeSubject='${s.key}';renderSubjects()" class="px-3.5 py-2 rounded-xl text-xs font-black ${activeSubject === s.key ? 'btn !py-2' : 'bg-slate-100 dark:bg-slate-800'}">${s.name}</button>
+  `).join("");
+  const list = state.videos[activeSubject] || [];
+  const wm = state.currentStudent ? esc(state.currentStudent.name + " - " + state.currentStudent.phone) : "محمي";
+  document.getElementById("selected-subject-videos").innerHTML = list.length
+    ? list.map(v => {
+      const embed = getEmbedUrl(v.videoUrl);
+      const playerHtml = embed
+        ? `<iframe src="${esc(embed)}" class="w-full rounded-xl aspect-video bg-black" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+        : `<video controls controlsList="nodownload" oncontextmenu="return false;" class="w-full rounded-xl bg-black max-h-60" src="${esc(v.videoUrl || v.dataUrl)}"></video>`;
+      return `<div class="p-4 rounded-2xl border space-y-2">
+        <div class="font-black text-sm">${esc(v.title)}</div>
+        <div class="watermark" data-wm="© ${wm}">${playerHtml}</div>
+        <div class="text-[11px] text-slate-400">${esc(v.at)}</div>
+      </div>`;
+    }).join("")
+    : `<div class="col-span-2 text-center py-10 text-slate-500 font-bold"><p>لا توجد فيديوهات في هذه المادة بعد</p></div>`;
+}
+
+const Auth = {
+  backToChoice(){
+    document.getElementById("role-choice-step").classList.remove("hidden");
+    ["student-choice-step","existing-student-form","teacher-auth-form"].forEach(id => document.getElementById(id).classList.add("hidden"));
+  },
+  backToStudentChoice(){
+    document.getElementById("student-choice-step").classList.remove("hidden");
+    document.getElementById("existing-student-form").classList.add("hidden");
+  },
+  openExisting(){
+    document.getElementById("student-choice-step").classList.add("hidden");
+    document.getElementById("existing-student-form").classList.remove("hidden");
+  },
+  submitJoin(e){
+    e.preventDefault();
+    const name = document.getElementById("join-student-name").value.trim();
+    const phone = normalizePhone(document.getElementById("join-student-phone").value.trim());
+    const code = document.getElementById("join-student-code").value.trim().toUpperCase();
+    const err = document.getElementById("join-error");
+    err.classList.add("hidden");
+    if(!name || !phone || !code) return;
+    const found = state.studentCodes.find(c => c.code === code && normalizePhone(c.phone) === phone);
+    if(!found){ err.textContent = "❌ البيانات مش مطابقة. اتأكد من الكود والرقم."; err.classList.remove("hidden"); return; }
+    if(found.blocked){ err.textContent = "⛔ الكود ده محظور."; err.classList.remove("hidden"); return; }
+    const elapsed = Math.floor((Date.now() - (found.createdAtMs || Date.now())) / 86400000);
+    if(elapsed >= CONFIG.CYCLE_DAYS){ err.textContent = "⏳ انتهت مدة اشتراك هذا الكود. تواصل مع المعلم للتجديد."; err.classList.remove("hidden"); return; }
+    found.used = true; found.usedBy = name; found.usedByPhone = phone;
+    state.isTeacher = false;
+    state.currentStudent = { name, phone, code, enrolledAt: found.createdAtMs || Date.now(), status: "approved", subject: found.subject };
+    notify("teacher", `دخل الطالب: ${name} بالكود ${code}`);
+    save(); closeModalFix(); UI.showStudent("home"); UI.updateNav();
+  },
+  submitTeacher(e){
+    e.preventDefault();
+    const v = document.getElementById("teacher-secret-input").value.trim();
+    const err = document.getElementById("teacher-error");
+    if(v !== currentTeacherPass()){ err.classList.remove("hidden"); return; }
+    err.classList.add("hidden");
+    document.getElementById("teacher-secret-input").value = "";
+    state.currentStudent = null;
+    state.isTeacher = true;
+    state.teacherCount++;
+    save(); closeModalFix(); UI.showTeacher("teacher"); UI.updateNav();
+  },
+  logout(){
+    state.isTeacher = false;
+    state.currentStudent = null;
+    save(); UI.showGate(); UI.updateNav();
+  }
+};
+
+const Attendance = {
+  save(e){
+    e.preventDefault();
+    const st = state.currentStudent;
+    const name = document.getElementById("att-student-name").value.trim() || (st ? st.name : "");
+    const phone = normalizePhone(document.getElementById("att-student-phone").value.trim() || (st ? st.phone : ""));
+    const parent = normalizePhone(document.getElementById("att-parent-phone").value.trim());
+    const todayStr = new Date().toLocaleDateString("ar-EG");
+    const alreadyToday = state.attendance.some(a => normalizePhone(a.phone) === phone && a.dayKey === todayStr);
+    if(alreadyToday) return alert("⚠️ لقد سجلت حضورك اليوم بالفعل!");
+    state.attendance.unshift({ name, phone, parentPhone: parent, date: new Date().toLocaleString("ar-EG"), dayKey: todayStr });
+    notify("teacher", `حضور: ${name}`);
+    notify("student", `تم تسجيل حضورك يا ${name}`);
+    save();
+    alert("✅ تم تسجيل حضورك بنجاح");
+  }
+};
+
+const Pay = {
+  renderSubjects(){
+    const box = document.getElementById("pay-subjects-list");
+    if(!box) return;
+    box.innerHTML = CONFIG.SUBJECTS.map(s => {
+      const checked = selectedSubjects.has(s.key) ? "checked" : "";
+      const sel = selectedSubjects.has(s.key) ? "selected" : "";
+      return `<label class="pay-card ${sel} flex gap-3 items-center p-3.5 rounded-2xl border-2 cursor-pointer">
+        <input type="checkbox" ${checked} onchange="Pay.toggleSubject('${s.key}', this.checked)" class="w-5 h-5" />
+        <span class="text-2xl">${s.icon}</span>
+        <div class="flex-1"><b class="text-sm">${s.name}</b></div>
+        <b class="text-blue-600 text-sm">50 ج</b>
+      </label>`;
+    }).join("");
+    Pay.updateTotal();
+  },
+  toggleSubject(k, c){ if(c) selectedSubjects.add(k); else selectedSubjects.delete(k); Pay.renderSubjects(); },
+  selectAll(){ CONFIG.SUBJECTS.forEach(s => selectedSubjects.add(s.key)); Pay.renderSubjects(); },
+  updateTotal(){
+    const count = selectedSubjects.size;
+    const isAll = count === 4;
+    const amount = count === 0 ? 0 : isAll ? 200 : count * 50;
+    document.getElementById("pay-amount-label").textContent = count === 0 ? "0 ج" : isAll ? "200 ج - كل المواد + انجليزي مجاناً" : amount + " ج";
+    document.getElementById("english-gift-box").classList.toggle("hidden", !isAll);
+    document.getElementById("pay-count-label").textContent = count + " مادة";
+    document.getElementById("sub-amount").value = amount;
+    document.getElementById("sub-subject").value = isAll ? "كل المواد" : [...selectedSubjects].map(k => CONFIG.SUBJECTS.find(s => s.key === k)?.name).join(" + ");
+  },
+  submit(e){
+    e.preventDefault();
+    if(selectedSubjects.size === 0) return alert("❌ اختار مادة واحدة على الأقل");
+    const phone = normalizePhone(document.getElementById("sub-phone").value.trim());
+    if(phone.length < 11) return alert("❌ رقم الطالب لازم يكون 11 رقم");
+    const from = document.getElementById("sub-from-number").value.trim();
+    if(!from) return alert("❌ اكتب الرقم اللي حوّلت منه");
+    const file = document.getElementById("sub-screenshot").files[0];
+    if(!file) return alert("ارفق سكرين التحويل");
+    const rd = new FileReader();
+    rd.onload = () => {
+      state.payments.unshift({
+        studentName: document.getElementById("sub-name").value.trim(),
+        phone,
+        parentPhone: normalizePhone(document.getElementById("sub-parent-phone").value.trim()),
+        fromNumber: from,
+        subject: document.getElementById("sub-subject").value,
+        amount: document.getElementById("sub-amount").value,
+        screenshotUrl: rd.result,
+        status: "قيد المراجعة",
+        createdAt: new Date().toLocaleString("ar-EG"),
+        code: null
+      });
+      notify("teacher", `طلب دفع جديد من ${document.getElementById("sub-name").value.trim()}`);
+      save(); e.target.reset(); selectedSubjects.clear(); Pay.renderSubjects();
+      document.getElementById("sub-pending-notice").classList.remove("hidden");
+      alert("✅ تم إرسال طلبك للمعلم");
+    };
+    rd.readAsDataURL(file);
+  }
+};
+
+function renderExams(){
+  const f = document.getElementById("exam-subject-filter").value;
+  const allowedKeys = new Set(getAllowedSubjects().map(s => s.key));
+  const allExams = state.exams || [];
+  const list = allExams.filter(x => allowedKeys.has(x.subjectKey) && (f === "all" || x.subjectKey === f));
+  document.getElementById("exams-by-subject-container").innerHTML = list.length
+    ? list.map(ex => {
+      const s = CONFIG.SUBJECTS.find(x => x.key === ex.subjectKey);
+      return `<div class="p-4 rounded-2xl border space-y-3">
+        <div class="flex justify-between text-xs font-black"><span>${s ? s.name : ""}</span><span class="badge bg-emerald-100 text-emerald-800">${esc(ex.type)}</span></div>
+        <div class="font-black">${esc(ex.title)}</div>
+        <button onclick="Exams.open('${esc(ex.id)}')" class="px-5 py-2 rounded-xl btn !py-2 text-xs">بدء الاختبار →</button>
+      </div>`;
+    }).join("")
+    : `<p class="text-sm text-slate-500 col-span-2">لا توجد اختبارات متاحة حالياً.</p>`;
+}
+
+const Exams = {
+  open(id){
+    const ex = (state.exams || []).find(x => x.id === id);
+    if(!ex) return;
+    const box = document.getElementById("exam-runner-box");
+    box.classList.remove("hidden");
+    box.innerHTML = `<div class="font-black">${esc(ex.title)}</div><p class="font-bold">${esc(ex.q)}</p>
+      <div class="space-y-2">${ex.opts.map((o, i) => `<label class="flex gap-2 p-3 rounded-xl border cursor-pointer"><input type="radio" name="ex-opt" value="${i}"/><span>${esc(o)}</span></label>`).join("")}</div>
+      <button onclick="Exams.grade('${esc(ex.id)}')" class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-black text-xs">تسليم</button>
+      <div id="ex-feedback" class="font-black text-sm pt-2"></div>`;
+  },
+  grade(id){
+    const ex = (state.exams || []).find(x => x.id === id);
+    if(!ex) return;
+    const c = document.querySelector('input[name="ex-opt"]:checked');
+    if(!c) return alert("اختر إجابة أولاً");
+    const idx = +c.value;
+    const ok = idx === ex.ans;
+    document.getElementById("ex-feedback").textContent = ok ? "✅ إجابة صحيحة 100%" : "❌ إجابة خاطئة - الصح: " + ex.opts[ex.ans];
+    if(state.currentStudent) notify("teacher", `اختبار ${ex.title}: ${state.currentStudent.name} (${ok ? "ناجح" : "أخطأ"})`);
+    save();
+  }
+};
+
+function renderNotifications(){
+  const role = getRole();
+  const box = document.getElementById("notifications-list");
+  let list = state.notifications;
+  if(role === "student") list = state.notifications.filter(n => n.target === "student");
+  if(role === "teacher") list = state.notifications.filter(n => n.target === "teacher");
+  box.innerHTML = list.length
+    ? list.map(n => `<div class="p-3.5 rounded-2xl border text-sm"><b>${esc(n.msg)}</b> <span class="text-[11px] text-slate-400">${esc(n.time)}</span></div>`).join("")
+    : `<p class="text-sm text-slate-500">لا توجد إشعارات ليك</p>`;
+}
+
+function checkCycle(){
+  const badge = document.getElementById("sub-timer-badge");
+  if(!badge) return;
+  badge.classList.add("hidden");
+  const st = state.currentStudent;
+  if(!st || st.status !== "approved") return;
+  const elapsed = Math.floor((Date.now() - st.enrolledAt) / 86400000);
+  const remain = Math.max(0, CONFIG.CYCLE_DAYS - elapsed);
+  badge.classList.remove("hidden");
+  document.getElementById("sub-days-left").textContent = remain;
+}
+
+function renderTeacher(){
+  if(getRole() !== "teacher") return;
+  document.getElementById("teacher-today-date").textContent = new Date().toLocaleDateString("ar-EG");
+  document.getElementById("t-stat-students").textContent = state.studentCodes.length;
+  document.getElementById("t-stat-codes").textContent = state.studentCodes.length;
+  document.getElementById("tab-count-codes").textContent = state.studentCodes.length;
+  const pendingPays = state.payments.filter(p => p.status === "قيد المراجعة").length;
+  document.getElementById("tab-count-payments").textContent = pendingPays;
+  document.getElementById("codes-left-label").textContent = `إجمالي الأكواد: ${state.studentCodes.length}`;
+  document.getElementById("t-stat-attendance").textContent = state.attendance.length;
+  const revenue = state.payments.filter(p => p.status === "مقبول").reduce((sum, p) => sum + (parseInt(p.amount, 10) || 0), 0);
+  document.getElementById("t-stat-revenue").textContent = `${revenue} ج`;
+
+  document.getElementById("teacher-activity").innerHTML = state.notifications.filter(n => n.target === "teacher").slice(0, 6).map(n => `
+    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs font-bold flex justify-between gap-2">
+      <span>${esc(n.msg)}</span><span class="text-slate-400">${esc(n.time)}</span>
+    </div>`).join("") || `<p class="text-xs text-slate-500">لا يوجد نشاط بعد</p>`;
+
+  document.getElementById("teacher-expiring").innerHTML = state.studentCodes.map(c => {
+    const remain = Math.max(0, CONFIG.CYCLE_DAYS - Math.floor((Date.now() - (c.createdAtMs || Date.now())) / 86400000));
+    return `<div class="p-3 rounded-xl border flex justify-between items-center text-xs font-bold">
+      <span>${esc(c.studentName)} (${esc(c.code)})</span>
+      <span class="badge ${remain <= 5 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">متبقي ${remain} يوم</span>
+    </div>`;
+  }).join("") || `<p class="text-xs text-slate-500">لا يوجد طلاب مسجلون بعد</p>`;
+
+  document.getElementById("teacher-codes-list").innerHTML = state.studentCodes.map(c => `
+    <div class="p-4 rounded-2xl border flex flex-wrap justify-between items-center gap-3">
+      <div>
+        <div class="font-black text-base text-violet-600">${esc(c.code)} <span class="badge ${c.blocked ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${c.blocked ? 'محظور' : 'نشط'}</span></div>
+        <div class="text-xs font-bold text-slate-600 dark:text-slate-300 mt-1">الطالب: ${esc(c.studentName)} • رقم: <span dir="ltr">${esc(c.phone)}</span> • ${esc(c.subject)}</div>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <button onclick="Teacher.copyCode('${esc(c.code)}')" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 text-xs font-black">نسخ</button>
+        <button onclick="Teacher.whatsappCode('${esc(c.code)}','${esc(c.phone)}','${esc(c.studentName)}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-black">واتساب</button>
+        <button onclick="Teacher.renewCode('${esc(c.code)}')" class="px-3 py-1.5 rounded-lg bg-blue-100 text-blue-800 text-xs font-black">تجديد 35 يوم</button>
+        <button onclick="Teacher.toggleBlockCode('${esc(c.code)}')" class="px-3 py-1.5 rounded-lg bg-amber-100 text-amber-800 text-xs font-black">${c.blocked ? 'فك الحظر' : 'حظر'}</button>
+        <button onclick="Teacher.deleteCode('${esc(c.code)}')" class="px-3 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-black">حذف</button>
+      </div>
+    </div>`).join("") || `<p class="text-xs text-slate-500">لا توجد أكواد بعد — أنشئ أول كود لطالبك من النموذج أعلاه.</p>`;
+
+  const q = (document.getElementById("student-search")?.value || "").trim().toLowerCase();
+  const flt = document.getElementById("student-filter")?.value || "all";
+  const filteredStudents = state.studentCodes.filter(c => {
+    const matchQ = !q || c.studentName.toLowerCase().includes(q) || c.code.toLowerCase().includes(q) || c.phone.includes(q);
+    const matchF = flt === "all" || (flt === "blocked" && c.blocked) || (flt === "active" && !c.blocked);
+    return matchQ && matchF;
+  });
+  document.getElementById("teacher-students-list").innerHTML = filteredStudents.map(c => `
+    <div class="p-4 rounded-2xl border flex justify-between items-center flex-wrap gap-2">
+      <div><b>${esc(c.studentName)}</b> — <span class="text-xs font-mono text-violet-600">${esc(c.code)}</span><div class="text-xs text-slate-500">${esc(c.phone)} • ${esc(c.subject)}</div></div>
+      <span class="badge ${c.blocked ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700'}">${c.blocked ? 'محظور' : (c.used ? 'دخل المنصة' : 'بانتظار الدخول')}</span>
+    </div>`).join("") || `<p class="text-xs text-slate-500">لا يوجد طلاب مطابقون</p>`;
+
+  document.getElementById("teacher-subject-tabs").innerHTML = CONFIG.SUBJECTS.map(s => `
+    <button onclick="activeTeacherSubject='${s.key}';renderTeacher()" class="px-3.5 py-2 rounded-xl text-xs font-black ${activeTeacherSubject === s.key ? 'btn !py-2' : 'bg-slate-100 dark:bg-slate-800'}">${s.name}</button>
+  `).join("");
+  const tvids = state.videos[activeTeacherSubject] || [];
+  document.getElementById("teacher-subject-videos-list").innerHTML = tvids.map((v, idx) => {
+    const embed = getEmbedUrl(v.videoUrl);
+    const preview = embed
+      ? `<iframe src="${esc(embed)}" class="w-full rounded-xl aspect-video bg-black" allowfullscreen></iframe>`
+      : `<video controls class="w-full rounded-xl bg-black max-h-48" src="${esc(v.videoUrl || v.dataUrl)}"></video>`;
+    return `<div class="p-3 rounded-2xl border space-y-2">
+      <div class="flex justify-between items-center"><b class="text-sm">${esc(v.title)}</b><button onclick="Teacher.deleteVideo('${activeTeacherSubject}',${idx})" class="text-xs text-rose-600 font-black">حذف</button></div>
+      ${preview}
+    </div>`;
+  }).join("") || `<p class="text-xs text-slate-500">لا توجد فيديوهات مرفوعة لهذا القسم</p>`;
+
+  document.getElementById("teacher-exams-control").innerHTML = (state.exams || []).map(ex => `
+    <div class="p-3 rounded-xl border flex justify-between items-center text-xs font-bold">
+      <span>${esc(ex.title)} — ${esc(ex.q)}</span>
+      <button onclick="Teacher.deleteExam('${esc(ex.id)}')" class="text-rose-600 font-black">حذف</button>
+    </div>`).join("");
+
+  document.getElementById("teacher-payments-list").innerHTML = state.payments.map((p, i) => `
+    <div class="p-4 rounded-2xl border space-y-2">
+      <div class="flex justify-between flex-wrap gap-2">
+        <b>${esc(p.studentName)} (${esc(p.amount)} ج)</b>
+        <span class="badge ${p.status === 'مقبول' ? 'bg-emerald-100 text-emerald-700' : p.status === 'مرفوض' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${esc(p.status)}</span>
+      </div>
+      <div class="text-xs text-slate-600 dark:text-slate-300">المواد: ${esc(p.subject)} • رقم الطالب: <span dir="ltr">${esc(p.phone)}</span> • محوّل من: <span dir="ltr">${esc(p.fromNumber)}</span> • ${esc(p.createdAt)}</div>
+      ${p.code ? `<div class="text-xs font-black text-violet-600">الكود المُولّد: ${esc(p.code)}</div>` : ""}
+      ${p.screenshotUrl ? `<img src="${p.screenshotUrl}" alt="إيصال" class="max-h-48 rounded-xl border" />` : ""}
+      ${p.status === "قيد المراجعة" ? `<div class="flex gap-2 pt-1"><button onclick="Teacher.approvePayment(${i})" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-black">قبول وتوليد كود</button><button onclick="Teacher.rejectPayment(${i})" class="px-3 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-black">رفض</button></div>` : ""}
+    </div>`).join("") || `<p class="text-xs text-slate-500">لا توجد طلبات دفع حالياً</p>`;
+
+  document.getElementById("teacher-attendance-tbody").innerHTML = state.attendance.map((a, i) => `
+    <tr class="border-b">
+      <td class="p-3 font-bold">${esc(a.name)}</td>
+      <td class="p-3" dir="ltr">${esc(a.phone)}</td>
+      <td class="p-3" dir="ltr">${esc(a.parentPhone)}</td>
+      <td class="p-3 text-xs text-slate-500">${esc(a.date)}</td>
+      <td class="p-3"><button onclick="Teacher.deleteAttendance(${i})" class="text-rose-600 text-xs font-black">حذف</button></td>
+    </tr>`).join("") || `<tr><td colspan="5" class="p-4 text-center text-slate-500">لا يوجد سجل حضور</td></tr>`;
+
+  document.getElementById("announce-list").innerHTML = state.announcements.map(a => `
+    <div class="p-3 rounded-xl border flex justify-between items-center text-sm">
+      <span>${esc(a.text)}</span>
+      <button onclick="Teacher.deleteAnnouncement('${a.id}')" class="text-xs text-rose-600 font-black">حذف</button>
+    </div>`).join("") || `<p class="text-xs text-slate-500">لا توجد إعلانات</p>`;
+}
+
+const Teacher = {
+  switchTab(tab){
+    teacherTab = tab;
+    document.querySelectorAll('[data-t-tab]').forEach(b => b.classList.toggle('active', b.dataset.tTab === tab));
+    ["overview","codes","students","videos","exams","payments","attendance","announce","settings"].forEach(t => {
+      const el = document.getElementById("t-tab-" + t);
+      if(el) el.classList.toggle("hidden", t !== tab);
+    });
+    renderTeacher();
+  },
+  createCode(){
+    const code = document.getElementById("new-code-value").value.trim().toUpperCase().replace(/\s/g, "");
+    const phone = normalizePhone(document.getElementById("new-code-phone").value.trim());
+    const name = document.getElementById("new-code-name").value.trim();
+    const subject = document.getElementById("new-code-subject").value;
+    if(!code) return alert("❌ اكتب الكود");
+    if(!phone || phone.length < 11) return alert("❌ الرقم لازم 11 رقم");
+    if(state.studentCodes.find(c => c.code === code)) return alert("❌ الكود موجود بالفعل");
+    state.studentCodes.unshift({ code, phone, studentName: name || ("طالب - " + phone), subject, amount: "كود يدوي", createdAt: new Date().toLocaleString("ar-EG"), createdAtMs: Date.now(), blocked: false, used: false, usedBy: "", usedByPhone: "" });
+    notify("student", `كود جديد اتعمل ليك: ${code}`);
+    save();
+    document.getElementById("new-code-value").value = "";
+    document.getElementById("new-code-phone").value = "";
+    document.getElementById("new-code-name").value = "";
+    alert("✅ اتعمل الكود: " + code + " للرقم: " + phone);
+  },
+  generateRandomCode(){
+    document.getElementById("new-code-value").value = "AHMED" + Math.floor(1000 + Math.random() * 9000);
+  },
+  copyCode(c){ navigator.clipboard?.writeText(c); alert("تم نسخ الكود: " + c); },
+  whatsappCode(code, phone, name){
+    const msg = encodeURIComponent(`أهلاً ${name || ""} 👋
+كودك في منصة مستر احمد: ${code}
+رقمك: ${phone}
+ادخل كطالب واكتب اسمك + رقمك + الكود`);
+    window.open(`https://wa.me/${String(phone || "").replace(/^0/, "20")}?text=${msg}`, "_blank");
+  },
+  renewCode(code){
+    const c = state.studentCodes.find(x => x.code === code);
+    if(!c) return;
+    c.createdAtMs = Date.now();
+    c.blocked = false;
+    save();
+    alert("✅ تم تجديد اشتراك الكود لمدة 35 يوم جديدة");
+  },
+  toggleBlockCode(code){
+    const c = state.studentCodes.find(x => x.code === code);
+    if(!c) return;
+    c.blocked = !c.blocked;
+    save();
+  },
+  deleteCode(code){
+    if(!confirm("حذف الكود نهائياً؟")) return;
+    state.studentCodes = state.studentCodes.filter(c => c.code !== code);
+    save();
+  },
+  uploadVideo(){
+    const title = document.getElementById("upload-video-title").value.trim();
+    const url = document.getElementById("upload-video-url").value.trim();
+    const file = document.getElementById("upload-video-file").files[0];
+    if(!title) return alert("اكتب عنوان الفيديو");
+    if(!url && !file) return alert("ضع رابط الفيديو أو اختر ملف من جهازك");
+    if(url){
+      state.videos[activeTeacherSubject] = state.videos[activeTeacherSubject] || [];
+      state.videos[activeTeacherSubject].unshift({ title, videoUrl: url, at: new Date().toLocaleString("ar-EG") });
+      save();
+      document.getElementById("upload-video-title").value = "";
+      document.getElementById("upload-video-url").value = "";
+      alert("✅ تم إضافة الفيديو بنجاح");
+      return;
+    }
+    const rd = new FileReader();
+    rd.onload = () => {
+      state.videos[activeTeacherSubject] = state.videos[activeTeacherSubject] || [];
+      state.videos[activeTeacherSubject].unshift({ title, dataUrl: rd.result, at: new Date().toLocaleString("ar-EG") });
+      save();
+      document.getElementById("upload-video-title").value = "";
+      document.getElementById("upload-video-file").value = "";
+      alert("✅ تم رفع الفيديو");
+    };
+    rd.readAsDataURL(file);
+  },
+  deleteVideo(subj, idx){
+    if(!confirm("حذف الفيديو؟")) return;
+    state.videos[subj].splice(idx, 1);
+    save();
+  },
+  addExam(){
+    const title = document.getElementById("new-exam-title").value.trim();
+    const subjectKey = document.getElementById("new-exam-subject").value;
+    const type = document.getElementById("new-exam-type").value;
+    const q = document.getElementById("new-exam-q").value.trim();
+    const o1 = document.getElementById("new-exam-opt1").value.trim();
+    const o2 = document.getElementById("new-exam-opt2").value.trim();
+    const o3 = document.getElementById("new-exam-opt3").value.trim();
+    if(!title || !q || !o1 || !o2 || !o3) return alert("أكمل كل حقول الامتحان");
+    state.exams = state.exams || [];
+    state.exams.unshift({ id: "EX-" + Date.now(), subjectKey, type, title, q, opts: [o1, o2, o3], ans: 0 });
+    save();
+    ["new-exam-title","new-exam-q","new-exam-opt1","new-exam-opt2","new-exam-opt3"].forEach(id => document.getElementById(id).value = "");
+    alert("✅ تم إضافة الامتحان");
+  },
+  deleteExam(id){
+    state.exams = (state.exams || []).filter(x => x.id !== id);
+    save();
+  },
+  approvePayment(i){
+    const p = state.payments[i];
+    if(!p) return;
+    const code = "STD" + Math.floor(1000 + Math.random() * 9000);
+    p.status = "مقبول";
+    p.code = code;
+    state.studentCodes.unshift({ code, phone: normalizePhone(p.phone), studentName: p.studentName, subject: p.subject, amount: p.amount + " ج", createdAt: new Date().toLocaleString("ar-EG"), createdAtMs: Date.now(), blocked: false, used: false, usedBy: "", usedByPhone: "" });
+    notify("student", `تم قبول اشتراكك وكودك هو: ${code}`);
+    save();
+    if(confirm(`✅ تم القبول وتوليد الكود: ${code}
+هل تريد إرساله للطالب عبر واتساب الآن؟`)){
+      Teacher.whatsappCode(code, p.phone, p.studentName);
+    }
+  },
+  rejectPayment(i){
+    if(state.payments[i]){ state.payments[i].status = "مرفوض"; save(); }
+  },
+  deleteAttendance(i){ state.attendance.splice(i, 1); save(); },
+  clearAttendance(){ if(confirm("مسح كل سجل الحضور؟")){ state.attendance = []; save(); } },
+  sendAnnouncement(){
+    const text = document.getElementById("announce-text").value.trim();
+    if(!text) return alert("اكتب نص الإعلان");
+    state.announcements.unshift({ id: "ann_" + Date.now(), text, at: new Date().toLocaleString("ar-EG") });
+    notify("student", "إعلان جديد: " + text);
+    document.getElementById("announce-text").value = "";
+    save();
+  },
+  deleteAnnouncement(id){ state.announcements = state.announcements.filter(a => a.id !== id); save(); },
+  changeTeacherPass(){
+    const np = document.getElementById("setting-teacher-pass").value.trim();
+    if(np.length < 4) return alert("كلمة السر لازم 4 أحرف/أرقام على الأقل");
+    state.customTeacherPass = np;
+    document.getElementById("setting-teacher-pass").value = "";
+    save(); alert("✅ تم تغيير كلمة السر بنجاح");
+  },
+  changePayNumber(){
+    const num = normalizePhone(document.getElementById("setting-pay-number").value.trim());
+    if(!num || num.length < 11) return alert("اكتب رقم صحيح (11 رقم)");
+    state.payNumber = num;
+    document.getElementById("setting-pay-number").value = "";
+    save(); alert("✅ تم تحديث الرقم");
+  },
+  clearCodes(){ if(confirm("مسح كل الأكواد؟")){ state.studentCodes = []; save(); } },
+  resetAll(){
+    if(!confirm("تحذير: سيتم مسح جميع الطلاب والأكواد والفيديوهات والبيانات والبدء من الصفر. هل أنت متأكد؟")) return;
+    state = JSON.parse(JSON.stringify(defaultState));
+    save();
+    alert("✅ تم تصفير المنصة بنجاح");
+  },
+  exportData(){
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "mr_ahmed_platform_backup.json"; a.click();
+    URL.revokeObjectURL(url);
+  },
+  importData(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const imported = JSON.parse(rd.result);
+        state = Object.assign(JSON.parse(JSON.stringify(defaultState)), imported);
+        save();
+        alert("✅ تم استيراد النسخة الاحتياطية بنجاح");
+      } catch {
+        alert("❌ ملف غير صالح");
+      }
+    };
+    rd.readAsText(file);
+  }
+};
+
+renderAll();
+</script>
+</body>
+</html>
